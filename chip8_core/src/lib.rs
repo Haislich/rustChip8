@@ -96,5 +96,21 @@ impl Emu{
         self.stack_pointer-=1;
         self.stack[self.stack_pointer as usize]
     }
-    
+    // Every opcode is composed of 2 bytes
+    fn fetch(&mut self) -> u16 {
+
+        let higher_byte = self.ram[self.program_counter as usize] as u8;
+        let lower_byte = self.ram[(self.program_counter+1)as usize] as u8;
+        // [higher_byte|lower_byte]
+        //    8 bits      8 bits
+        let op = ((higher_byte as u16 )<< 8) | lower_byte as u16;
+        self.program_counter+=2;
+        op
+    }
+
+    // https://www.reddit.com/r/explainlikeimfive/comments/4mn531/comment/d3wr3oj/?utm_source=share&utm_medium=web2x&context=3
+    pub fn tick(&mut self){
+        // Get the current op code to execute
+        let op = self.fetch();
+    }
 }
